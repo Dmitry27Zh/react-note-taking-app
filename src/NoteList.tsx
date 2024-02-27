@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import ReactSelect from 'react-select'
 import { Note, Tag } from './App'
 import NoteCard from './NoteCard'
+import EditTagsModal from './EditTagsModal'
 
 type NoteListProps = {
   availableTags: Tag[]
@@ -13,6 +14,7 @@ type NoteListProps = {
 const NoteList = ({ availableTags, notes }: NoteListProps) => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([])
   const [title, setTitle] = useState<string>('')
+  const [editTagsModalIsOpen, setEditTagsModalIsOpen] = useState(false)
   const filteredNotes = useMemo(() => {
     return notes.filter((note) => {
       return (
@@ -33,7 +35,9 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
             <Link to="/new">
               <Button variant="primary">Create</Button>
             </Link>
-            <Button variant="outline-secondary">Edit Tags</Button>
+            <Button onClick={() => setEditTagsModalIsOpen(true)} variant="outline-secondary">
+              Edit Tags
+            </Button>
           </Stack>
         </Col>
       </Row>
@@ -84,6 +88,11 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
           </Col>
         ))}
       </Row>
+      <EditTagsModal
+        availableTags={availableTags}
+        show={editTagsModalIsOpen}
+        handleClose={() => setEditTagsModalIsOpen(false)}
+      />
     </>
   )
 }
